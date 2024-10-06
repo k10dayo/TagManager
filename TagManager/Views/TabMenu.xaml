@@ -1,0 +1,43 @@
+﻿<UserControl x:Class="TagManager.Views.TabMenu"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:prism="http://prismlibrary.com/"             
+             prism:ViewModelLocator.AutoWireViewModel="True"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             >
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.1*" MaxHeight="50"/>
+            <RowDefinition Height="0.1*" MaxHeight="50"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Text="タブメニュー" FontSize="20" Grid.Row="0" Background="White"/>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Button Content="+" Grid.Column="0" Command="{Binding AddViewButton}"/>
+            <Button Content="-" Grid.Column="1" Command="{Binding RemoveViewButton}"/>
+        </Grid>        
+
+        <ListBox Grid.Row="2" ItemsSource="{Binding ViewCollection}">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel>
+                        <TextBlock Text="{Binding CurrentPath}"/>
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="SelectionChanged">
+                    <prism:InvokeCommandAction
+                        Command="{Binding ViewSelected}"      
+                        TriggerParameterPath="AddedItems"           
+                    />
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+        </ListBox>
+    </Grid>
+</UserControl>
