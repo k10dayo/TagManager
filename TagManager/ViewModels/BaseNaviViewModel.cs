@@ -53,7 +53,7 @@ namespace TagManager.ViewModels
         private readonly IRegionManager _regionManager;
 
         private CommonProperty _commonProperty;
-        //これがTrueだと、ナビが開く
+        //これがTrueだと、ナビが開くぞ！
         public bool IsNaviOpen => _commonProperty.IsNaviOpen;
 
         //タブメニューを受け取る
