@@ -3,9 +3,11 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TagManager.Models.EverythinModels;
 using TagManager.ViewModels;
 using TagManager.Views;
 
@@ -14,9 +16,11 @@ namespace TagManager.Models
     public class ManagerWindowWrapperList : BindableBase, INotifyPropertyChanged
     {
         CommonProperty _commonProperty;
-        public ManagerWindowWrapperList(CommonProperty commonProperty)
+        EverythingModel _everythingModel;
+        public ManagerWindowWrapperList(CommonProperty commonProperty, EverythingModel everythingModel)
         {
             _commonProperty = commonProperty;
+            _everythingModel = everythingModel;
         }
 
         //選択中のマネージャーウィンドウ
@@ -70,11 +74,15 @@ namespace TagManager.Models
         //新しいマネージャービューをリストに追加する関数
         public void AddManagerWindow()
         {
-            var m = new ManagerWindowViewModel(_commonProperty);
-            var view = new TagManager.Views.ManagerWindow { DataContext = m };
+            var view = new TagManager.Views.ManagerWindow 
+            {
+                DataContext = new ManagerWindowViewModel(_commonProperty, _everythingModel)
+            };
+
             var mww = new ManagerWindowWrapper("Folder" + ViewCollection.Count, view);
 
             ViewCollection.Add(mww);
         }
+        
     }
 }

@@ -2,14 +2,56 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:prism="http://prismlibrary.com/"             
-             prism:ViewModelLocator.AutoWireViewModel="True">
+             prism:ViewModelLocator.AutoWireViewModel="True"
+             xmlns:selector="clr-namespace:TagManager.Views.Selector"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             >
 
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="StyleDec/BaseDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
+
+
+            <DataTemplate x:Key="FileTemplate">
+                <StackPanel Width="{Binding DataContext.FileWidth, RelativeSource={RelativeSource AncestorType=UserControl}}">
+                    <Label Content="ファイル" Background="Red" FontSize="20"/>
+                    <TextBlock Text="{Binding FileName}"/>
+                </StackPanel>
+            </DataTemplate>
+
+            <DataTemplate x:Key="PictureTemplate">
+                <StackPanel Width="{Binding DataContext.FileWidth, RelativeSource={RelativeSource AncestorType=UserControl}}">
+                    <Image Source="{Binding FullPath}"
+                           MaxHeight="{Binding DataContext.FileMaxHeight, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                    />
+                    <TextBlock Text="{Binding FileName}"/>
+                </StackPanel>
+            </DataTemplate>
+
+            <DataTemplate x:Key="FolderTemplate">
+                <StackPanel Width="{Binding DataContext.FileWidth, RelativeSource={RelativeSource AncestorType=UserControl}}">
+                    <Label Content="フォルダ" Background="Blue" FontSize="20"/>
+                    <TextBlock Text="{Binding FileName}"/>
+                    <TextBlock Text="{Binding FullPath}" Visibility="Collapsed" x:Name="FullPath"/>
+                    <StackPanel.InputBindings>
+                        <MouseBinding MouseAction="LeftDoubleClick"
+                                      Command="{Binding DataContext.FolderDubleClick, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                      CommandParameter="{Binding Text, ElementName=FullPath}"
+                        />
+                    </StackPanel.InputBindings>
+                </StackPanel>
+            </DataTemplate>
+
+            <selector:FileTypeTemplateSelector x:Key="FileTypeTemplateSelector"
+                                   FileTemplate="{StaticResource FileTemplate}"
+                                   PictureTemplate="{StaticResource PictureTemplate}"
+                                   FolderTemplate="{StaticResource FolderTemplate}"
+            />
+
         </ResourceDictionary>
+
     </UserControl.Resources>
     
     <Grid>
@@ -18,25 +60,35 @@
             <RowDefinition Height="0.05*"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <Grid Grid.Row="0" Background="Gray">
+        <Grid Grid.Row="0" Background="Gray" Height="Auto" x:Name="ManagerHeader">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="0.1*"/>
+                <ColumnDefinition Width="{Binding ActualHeight, ElementName=ManagerHeader}"/>
                 <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="0.1*"/>
-                <ColumnDefinition Width="0.1*"/>
-                <ColumnDefinition Width="0.1*"/>
+                <ColumnDefinition Width="{Binding ActualHeight, ElementName=ManagerHeader}"/>
+                <ColumnDefinition Width="{Binding ActualHeight, ElementName=ManagerHeader}"/>
+                <ColumnDefinition Width="{Binding ActualHeight, ElementName=ManagerHeader}"/>
             </Grid.ColumnDefinitions>
             <Button Content="三" Grid.Column="0" Style="{StaticResource NaviButtonStyle}" Command="{Binding NaviButtonClick}" Click="Button_Click"/>
-            <Label Grid.Column="1"/>
-            <Button Content="←" Grid.Column="2" Style="{StaticResource defaultButtonStyle}" />
-            <Button Content="→" Grid.Column="3" Style="{StaticResource defaultButtonStyle}" />
-            <Button Content="↑" Grid.Column="4" Style="{StaticResource defaultButtonStyle}" />
+            <Label Grid.Column="1" Content="{Binding SearchData.CurrentPath}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <Button Content="←" Grid.Column="2" Style="{StaticResource defaultButtonStyle}" Command="{Binding AccessPrevButton}"/>
+            <Button Content="→" Grid.Column="3" Style="{StaticResource defaultButtonStyle}" Command="{Binding AccessNextButton}"/>
+            <Button Content="↑" Grid.Column="4" Style="{StaticResource defaultButtonStyle}" Command="{Binding AccessParentButton}"/>
         </Grid>
         <Grid Grid.Row="1">
             <Label Background="LightGray"/>
         </Grid>
-        <Grid Grid.Row="2">
-            
+        <Grid Grid.Row="2" x:Name="ManagerListGrid">
+
+            <ListBox Grid.Row="2" ItemsSource="{Binding SearchData.FileList}"
+                     ItemTemplateSelector="{StaticResource FileTypeTemplateSelector}"
+                     ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+            >
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel/>
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+            </ListBox>
         </Grid>
     </Grid>
 </UserControl>

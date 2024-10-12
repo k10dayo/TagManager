@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace TagManager.Models
 {
+    //ナビのボタンなど、共通で使いたいプロパティ
     public class CommonProperty : BindableBase, INotifyPropertyChanged
     {
         private bool _isNaviOpen = true;
@@ -18,9 +19,7 @@ namespace TagManager.Models
             set 
             {
                 SetProperty(ref _isNaviOpen, value);
-                OnPropertyChanged(nameof(IsNaviOpen));
-                Debug.Print("noo");
-
+                OnNaviButtonHandler(nameof(IsNaviOpen));
             }
         }
         public void toggleIsNaviOpen()
@@ -30,10 +29,10 @@ namespace TagManager.Models
 
 
         //通知を飛ばす用
-        public new event PropertyChangedEventHandler PropertyChanged;
-        protected virtual void OnPropertyChanged(string propertyName)
+        public event PropertyChangedEventHandler NaviButtonHandler;
+        protected virtual void OnNaviButtonHandler(string propertyName)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            NaviButtonHandler?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }
