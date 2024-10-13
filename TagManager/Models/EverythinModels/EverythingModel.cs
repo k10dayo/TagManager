@@ -10,10 +10,12 @@ using System.Threading.Tasks;
 
 namespace TagManager.Models.EverythinModels
 {
+    //シングルトンクラス
     public class EverythingModel
     {
         private readonly IEverything everything = new Everything();        
 
+        //Everythinで検索する関数　SearchDataを返す
         public SearchData SearchExecute(string searchPath)
         {
             if (!EverythingState.IsStarted())
@@ -51,7 +53,6 @@ namespace TagManager.Models.EverythinModels
             return Results;
 
         }
-
 
     }
 }

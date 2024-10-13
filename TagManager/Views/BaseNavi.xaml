@@ -38,7 +38,7 @@
                     <ColumnDefinition />
                     <ColumnDefinition />
                 </Grid.ColumnDefinitions>
-                <Button Grid.Column="0" Content="★" Style="{StaticResource defaultButtonStyle}" Command="{Binding NaviButtonClick}"/>
+                <Button Grid.Column="0" Content="★" Style="{StaticResource defaultButtonStyle}" Command="{Binding NaviButtonClick}" />
                 <Button Grid.Column="1" Content="タグ" Style="{StaticResource defaultButtonStyle}"/>
                 <Button Grid.Column="2" Content="タブ" Style="{StaticResource defaultButtonStyle}" Command="{Binding}"/>
             </Grid>

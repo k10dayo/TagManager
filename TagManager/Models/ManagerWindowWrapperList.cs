@@ -47,15 +47,6 @@ namespace TagManager.Models
             }
         }
 
-        //リストにビューを追加
-        public void AddView(ManagerWindow managerWindow)
-        {
-            int count = ViewCollection.Count;
-
-            var mww = new ManagerWindowWrapper("Folder" + count, managerWindow);
-
-            ViewCollection.Add(mww);
-        }
 
         //リストが変更されると通知を飛ばす
         public new event PropertyChangedEventHandler PropertyChanged;
@@ -79,7 +70,7 @@ namespace TagManager.Models
                 DataContext = new ManagerWindowViewModel(_commonProperty, _everythingModel)
             };
 
-            var mww = new ManagerWindowWrapper("Folder" + ViewCollection.Count, view);
+            var mww = new ManagerWindowWrapper("Folder" + ViewCollection.Count, view, ViewCollection.Count);
 
             ViewCollection.Add(mww);
         }

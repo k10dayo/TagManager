@@ -4,7 +4,9 @@
              xmlns:prism="http://prismlibrary.com/"             
              prism:ViewModelLocator.AutoWireViewModel="True"
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:my="clr-namespace:TagManager.ViewModels"
              >
+    
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="0.1*" MaxHeight="50"/>
@@ -20,20 +22,34 @@
             </Grid.ColumnDefinitions>
             <Button Content="+" Grid.Column="0" Command="{Binding AddViewButton}"/>
             <Button Content="-" Grid.Column="1" Command="{Binding RemoveViewButton}"/>
-        </Grid>        
+        </Grid>
 
-        <ListBox Grid.Row="2" ItemsSource="{Binding ViewCollection}">
+        <ListBox Grid.Row="2" ItemsSource="{Binding ViewCollection}" HorizontalContentAlignment="Stretch" x:Name="Lst">
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <StackPanel>
-                        <TextBlock Text="{Binding CurrentPath}"/>
-                    </StackPanel>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="0.3*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        
+                        <Label Background="Blue" Grid.Column="0" Height="100"/>
+                        <TextBlock Text="{Binding CurrentPath}" Background="LightBlue" Grid.Column="1" x:Name="FolderPath"/>
+
+                        <Grid.ContextMenu>
+                            <ContextMenu Opened="OnContextMenuOpened">
+                                <MenuItem Header="わお" Command="{Binding TestButton}" 
+                                          CommandParameter="{Binding CurrentPath}"/>
+                            </ContextMenu>
+                        </Grid.ContextMenu>
+
+                    </Grid>
                 </DataTemplate>
             </ListBox.ItemTemplate>
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="SelectionChanged">
                     <prism:InvokeCommandAction
-                        Command="{Binding ViewSelected}"      
+                        Command="{Binding ViewSelected}"
                         TriggerParameterPath="AddedItems"           
                     />
                 </i:EventTrigger>

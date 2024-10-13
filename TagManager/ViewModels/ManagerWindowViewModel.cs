@@ -27,7 +27,7 @@ namespace TagManager.ViewModels
 
             FolderDubleClick = new DelegateCommand<object>(FolderDubleClickExecute);
 
-            NewCurrentFolder("C:\\Users\\katotakehiro\\Pictures\\ファンブック");
+            NewCurrentFolder("C:\\テストフォルダー\\file_manager_directory");
         }        
 
         //ファイルの横幅

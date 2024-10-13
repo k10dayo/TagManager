@@ -1,14 +1,8 @@
-﻿using Prism.Commands;
-using Prism.Mvvm;
+﻿using Prism.Mvvm;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using static TagManager.ViewModels.ManagerWindowViewModel;
-using static TagManager.ViewModels.TabMenuViewModel;
 using TagManager.Models;
 using TagManager.Views;
-using Prism.Navigation.Regions;
+using Prism.Regions;
 
 namespace TagManager.ViewModels
 {
@@ -18,7 +12,6 @@ namespace TagManager.ViewModels
         (
             IRegionManager regionManager,
             ManagerWindowWrapperList managerWindowWrapperList,
-            TabMenuViewModel tabMenuViewModel,
             CommonProperty commonProperty
         )
         {
@@ -44,29 +37,24 @@ namespace TagManager.ViewModels
 
             //ナビメニューを表示する
             _regionManager.RegisterViewWithRegion("NaviMenuRegion", nameof(TabMenu));
-            //タブメニューのアドボタンのイベントを購読する
-            _tabMenuViewModel = tabMenuViewModel;
-            _tabMenuViewModel.RemoveViewButtonHandler -= RemoveViewButtonEvent;
 
-            }
+
+        }
         //ナビゲーション
         private readonly IRegionManager _regionManager;
 
         private CommonProperty _commonProperty;
         //これがTrueだと、ナビが開くぞ！
         public bool IsNaviOpen => _commonProperty.IsNaviOpen;
-
-        //タブメニューを受け取る
-        private TabMenuViewModel _tabMenuViewModel;
-        //タブのリストを受け取る
+        //ManagerWindowWrapperListを受け取る(シングルトン)
         private ManagerWindowWrapperList _managerWindowWrapperList;
 
-        public void RemoveViewButtonEvent(object sender, EventArgs e)
-        {
-            //_managerWindowWrapperList.AddView(view);
-        }
-
+        //表示するマネージャービュー
         public ManagerWindow SelectedManagerWindow => _managerWindowWrapperList.SelectedManagerWindow;
+
+
+
+        
 
     }
 

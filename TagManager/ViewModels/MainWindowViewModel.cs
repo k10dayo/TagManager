@@ -1,5 +1,5 @@
 ﻿using Prism.Mvvm;
-using Prism.Navigation.Regions;
+using Prism.Regions;
 using TagManager.Views;
 
 namespace TagManager.ViewModels

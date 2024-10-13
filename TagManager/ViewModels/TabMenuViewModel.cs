@@ -20,9 +20,14 @@ namespace TagManager.ViewModels
             _managerWindowWrapperList = managerWindowWrapperList;
             //アドボタンのコマンド登録
             AddViewButton = new DelegateCommand(AddViewButtonExecute);
+            DeleteTabButton = new DelegateCommand<object>(DeleteTabButtonExecute);
 
             ViewSelected = new DelegateCommand<object[]>(ViewSelectedExecute);
-        }        
+
+
+            TestButton = new DelegateCommand<object>(TestButtonExecute);
+
+        }
 
         //タブリストをバインドしている変数
         public ObservableCollection<ManagerWindowWrapper> ViewCollection => _managerWindowWrapperList.ViewCollection;
@@ -35,12 +40,12 @@ namespace TagManager.ViewModels
         }
 
         //リムーブボタン押したときのコマンド
-        public DelegateCommand RemoveViewButton { get; }
-        public void RemoveViewButtonExecute()
+        public DelegateCommand<object> DeleteTabButton { get; }
+        public void DeleteTabButtonExecute(object parameter)
         {
-            RemoveViewButtonHandler?.Invoke(this, new EventArgs());
+            Debug.Print("えええええ");
+            Debug.Print(parameter.ToString());
         }
-        public event EventHandler RemoveViewButtonHandler;
 
 
         //タブリストを選択したときのコマンド
@@ -58,5 +63,27 @@ namespace TagManager.ViewModels
                 Debug.Print("ぬるやんけ");
             }
         }
+
+
+
+
+        // コマンドの定義
+        public DelegateCommand<object> TestButton { get; }
+
+        // コマンドが実行されたときの処理
+        private void TestButtonExecute(object parameter)
+        {
+            if (parameter != null)
+            {
+                Debug.Print(parameter.ToString());
+            }
+            else
+            {
+                Debug.Print("ぬる");
+            }
+
+            Debug.Print("わお"); // ここで"わお"を出力
+        }
+
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Windows.Controls;
+﻿using System.Windows;
+using System.Windows.Controls;
 
 namespace TagManager.Views
 {
@@ -10,6 +11,17 @@ namespace TagManager.Views
         public TabMenu()
         {
             InitializeComponent();
+        }
+
+        //コンテキストメニューは開くたびにコードビハインドでデータコンテキストを渡す？さいないといけないらしい
+        private void OnContextMenuOpened(object sender, RoutedEventArgs e)
+        {
+            if (sender is ContextMenu contextMenu)
+            {
+                // ListBox のデータコンテキストを ContextMenu に設定
+                contextMenu.DataContext = Lst.DataContext;
+
+            }
         }
     }
 }
