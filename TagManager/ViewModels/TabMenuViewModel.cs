@@ -52,19 +52,16 @@ namespace TagManager.ViewModels
         public DelegateCommand<object[]> ViewSelected { get; }
         private void ViewSelectedExecute(object[] args)
         {
-            var a = args[0] as ManagerWindowWrapper;
-            if (a != null)
+            if (args.Length > 0)//なんかこの条件ないと、タブを右クリックして削除するときに、右クリックした時に選択状態になり、消すとargs[0]がOutOfRangeでエラーになる？
             {
-                Debug.Print(a.CurrentPath);
-                _managerWindowWrapperList.SelectedManagerWindow = a.ManagerWindow;
-            }
-            else
-            {
-                Debug.Print("ぬるやんけ");
+                var mww = args[0] as ManagerWindowWrapper;
+                if (mww != null)
+                {
+                    Debug.Print(mww.CurrentPath);
+                    _managerWindowWrapperList.ChangeSelectedManagerWindow(mww);
+                }
             }
         }
-
-
 
 
         // コマンドの定義
@@ -73,16 +70,13 @@ namespace TagManager.ViewModels
         // コマンドが実行されたときの処理
         private void TestButtonExecute(object parameter)
         {
-            if (parameter != null)
+            if(parameter != null)
             {
-                Debug.Print(parameter.ToString());
-            }
-            else
-            {
-                Debug.Print("ぬる");
-            }
+                Guid viewId = (Guid)parameter;
 
-            Debug.Print("わお"); // ここで"わお"を出力
+                Debug.Print(parameter.ToString());
+                _managerWindowWrapperList.RemoveManagerWindow(viewId);
+            }            
         }
 
     }

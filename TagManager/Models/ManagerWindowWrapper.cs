@@ -11,11 +11,11 @@ namespace TagManager.Models
     //一つのタブマネージャー
     public class ManagerWindowWrapper
     {
-        public ManagerWindowWrapper(string currentPath, ManagerWindow managerWindow, int listIndex)
+        public ManagerWindowWrapper(string currentPath, ManagerWindow managerWindow, Guid viewId)
         {
             CurrentPath = currentPath;
             ManagerWindow = managerWindow;
-            ListIndex = listIndex;
+            ViewId = viewId;
         }
 
         //カレントパス
@@ -34,11 +34,11 @@ namespace TagManager.Models
             set { _managerWindow = value; }
         }
 
-        private int _listIndex;
-        public int ListIndex
+        private Guid _viewId;
+        public Guid ViewId
         {
-            get { return _listIndex; }
-            set { _listIndex = value; }
+            get { return _viewId; }
+            set { _viewId = value; }
         }
     }
 }

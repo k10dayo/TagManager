@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Net.Mail;
 using System.Text;
 using System.Threading.Tasks;
 using TagManager.Models.EverythinModels;
@@ -17,12 +18,23 @@ namespace TagManager.Models
     {
         CommonProperty _commonProperty;
         EverythingModel _everythingModel;
+        //コンストラクタ
         public ManagerWindowWrapperList(CommonProperty commonProperty, EverythingModel everythingModel)
         {
             _commonProperty = commonProperty;
             _everythingModel = everythingModel;
         }
 
+        //選択中のListIndex
+        private Guid _selectedViewId;
+        public Guid SelectedViewId
+        {
+            get { return _selectedViewId; }
+            set
+            {
+                _selectedViewId = value;
+            }
+        }
         //選択中のマネージャーウィンドウ
         private ManagerWindow _selectedManagerWindow;
         public ManagerWindow SelectedManagerWindow
@@ -34,6 +46,8 @@ namespace TagManager.Models
                 OnSelectedManagerWindowChanged(nameof(SelectedManagerWindow));
             }
         }
+
+        public HashSet<int> UniqueViewIds = new();
 
         //マネージャービューのリスト（コレクション）
         public ObservableCollection<ManagerWindowWrapper> _viewCollection = new ObservableCollection<ManagerWindowWrapper>();
@@ -70,10 +84,49 @@ namespace TagManager.Models
                 DataContext = new ManagerWindowViewModel(_commonProperty, _everythingModel)
             };
 
-            var mww = new ManagerWindowWrapper("Folder" + ViewCollection.Count, view, ViewCollection.Count);
+            Guid uniqueId = Guid.NewGuid();
+
+            var mww = new ManagerWindowWrapper("Folder" + ViewCollection.Count, view, uniqueId);
 
             ViewCollection.Add(mww);
         }
+
+        //引数のインデックスをもつマネージャービューを削除する
+        public void RemoveManagerWindow(Guid viewId)
+        {
+            int index = _viewCollection.ToList().FindIndex(item => item.ViewId == viewId);
+            Debug.Print("インデックス: " + index.ToString());
+
+            if (viewId == SelectedViewId)
+            {
+                if (index != 0)
+                {
+                    ChangeSelectedManagerWindow(ViewCollection[index - 1]);
+                }
+                else if (ViewCollection.Count == 1)
+                {
+                    AddManagerWindow();
+                    ChangeSelectedManagerWindow(ViewCollection[1]);
+                }
+                else
+                {
+                    ChangeSelectedManagerWindow(ViewCollection[index + 1]);
+                }
+            }
+
+
+            ViewCollection.RemoveAt(1);
+
+        }
+
+        //選択中のマネージャービューを変更するとき、選択中のインデックスも変更する
+        public void ChangeSelectedManagerWindow(ManagerWindowWrapper mww)
+        {
+            SelectedViewId = mww.ViewId;
+            SelectedManagerWindow = mww.ManagerWindow;
+        }
+
+       
         
     }
 }

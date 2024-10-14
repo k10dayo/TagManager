@@ -5,8 +5,9 @@
              prism:ViewModelLocator.AutoWireViewModel="True"
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:my="clr-namespace:TagManager.ViewModels"
+             xmlns:converter="clr-namespace:TagManager.Views.Converter"
              >
-    
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="0.1*" MaxHeight="50"/>
@@ -31,15 +32,13 @@
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="0.3*"/>
                             <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="0.1*"/>
                         </Grid.ColumnDefinitions>
                         
                         <Label Background="Blue" Grid.Column="0" Height="100"/>
-                        <TextBlock Text="{Binding CurrentPath}" Background="LightBlue" Grid.Column="1" x:Name="FolderPath"/>
-
+                        <Label Content="{Binding CurrentPath}" Background="LightBlue" Grid.Column="1" x:Name="FolderPath"/>
                         <Grid.ContextMenu>
                             <ContextMenu Opened="OnContextMenuOpened">
-                                <MenuItem Header="わお" Command="{Binding TestButton}" 
-                                          CommandParameter="{Binding CurrentPath}"/>
                             </ContextMenu>
                         </Grid.ContextMenu>
 
