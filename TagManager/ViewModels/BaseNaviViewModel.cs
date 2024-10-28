@@ -3,6 +3,9 @@ using System;
 using TagManager.Models;
 using TagManager.Views;
 using Prism.Regions;
+using Prism.Commands;
+using System.Windows;
+using Prism.Services.Dialogs;
 
 namespace TagManager.ViewModels
 {
@@ -12,10 +15,12 @@ namespace TagManager.ViewModels
         (
             IRegionManager regionManager,
             ManagerWindowWrapperList managerWindowWrapperList,
-            CommonProperty commonProperty
+            CommonProperty commonProperty,
+            IDialogService dialogService
         )
         {
             _regionManager = regionManager;
+            _dialogService = dialogService;
             //選択されたマネージャウィンドウの変更の通知を購読
             _managerWindowWrapperList = managerWindowWrapperList;
             _managerWindowWrapperList.SelectedManagerWindowChanged += (s, e) =>
@@ -38,10 +43,18 @@ namespace TagManager.ViewModels
             //ナビメニューを表示する
             _regionManager.RegisterViewWithRegion("NaviMenuRegion", nameof(TabMenu));
 
+            //ボタン
+            SettingButtonClick = new DelegateCommand(SettingButtonClickExecute);
+
+
+
 
         }
         //ナビゲーション
         private readonly IRegionManager _regionManager;
+
+        //ダイアログ
+        private readonly IDialogService _dialogService;
 
         private CommonProperty _commonProperty;
         //これがTrueだと、ナビが開くぞ！
@@ -53,9 +66,30 @@ namespace TagManager.ViewModels
         public ManagerWindow SelectedManagerWindow => _managerWindowWrapperList.SelectedManagerWindow;
 
 
+        //ナビボタンをクリックしたときの処理
+        public DelegateCommand SettingButtonClick { get; }
+        public void SettingButtonClickExecute()
+        {
 
-        
+            var parameters = new DialogParameters
+            {
+                { "paramKey", "パラメーター"}
+            };
 
+
+            _dialogService.ShowDialog(nameof(SettingDialog), parameters, r =>
+            {
+                if (r.Result == ButtonResult.OK)
+                {
+                    // 以下のresultでは、"SampleDialogViewModel"のOKコマンドで追加した
+                    // "結果のパラメーター"という文字列が取得できます。
+                    var result = r.Parameters.GetValue<string>("resultParam");
+                }
+            });
+
+            
+
+        }
     }
 
 }

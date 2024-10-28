@@ -5,10 +5,21 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="EverythingNetCore" Version="2.0.0" />
-    <PackageReference Include="Prism.Unity" Version="8.1.97" />
+    <None Remove="Resources\Images\NoImage.png" />
+    <None Remove="Resources\UserSetting.json" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Resources\Images\" />
+    <Resource Include="Resources\Images\NoImage.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Content Include="Resources\UserSetting.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="EverythingNetCore" Version="2.0.0" />
+    <PackageReference Include="NUnit" Version="3.13.3" />
+    <PackageReference Include="NUnit3TestAdapter" Version="4.6.0" />
+    <PackageReference Include="Prism.Unity" Version="8.1.97" />
   </ItemGroup>
 </Project>

@@ -5,6 +5,7 @@
              prism:ViewModelLocator.AutoWireViewModel="True"
              xmlns:selector="clr-namespace:TagManager.Views.Selector"
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:converter="clr-namespace:TagManager.Views.Converter"
              >
 
     <UserControl.Resources>
@@ -12,6 +13,8 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="StyleDec/BaseDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
+
+            <converter:ImageSourceConverter x:Key="ImageSourceConverter"/>
 
 
             <DataTemplate x:Key="FileTemplate">
@@ -23,26 +26,58 @@
 
             <DataTemplate x:Key="PictureTemplate">
                 <StackPanel Width="{Binding DataContext.FileWidth, RelativeSource={RelativeSource AncestorType=UserControl}}">
-                    <Image Source="{Binding FullPath}"
-                           MaxHeight="{Binding DataContext.FileMaxHeight, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                    />
-                    <TextBlock Text="{Binding FileName}"/>
-                </StackPanel>
-            </DataTemplate>
 
-            <DataTemplate x:Key="FolderTemplate">
-                <StackPanel Width="{Binding DataContext.FileWidth, RelativeSource={RelativeSource AncestorType=UserControl}}">
-                    <Label Content="フォルダ" Background="Blue" FontSize="20"/>
+                    <!--<Image Source="{Binding FullPath}"
+                               MaxHeight="{Binding DataContext.FileMaxHeight, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                               Grid.Row="1"
+                        />-->
+                    <Image Source="{Binding ThumbnailPath, Converter={StaticResource ImageSourceConverter}}"
+                        Height="{Binding DataContext.FileMaxHeight}" Grid.Row="1" Margin="2"
+                        MaxHeight="{Binding DataContext.FileMaxHeight, RelativeSource={RelativeSource AncestorType=UserControl}}"/>
+
                     <TextBlock Text="{Binding FileName}"/>
-                    <TextBlock Text="{Binding FullPath}" Visibility="Collapsed" x:Name="FullPath"/>
                     <StackPanel.InputBindings>
                         <MouseBinding MouseAction="LeftDoubleClick"
-                                      Command="{Binding DataContext.FolderDubleClick, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                      CommandParameter="{Binding Text, ElementName=FullPath}"
+                            Command="{Binding DataContext.PictureDubleClick, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                            CommandParameter="{Binding FullPath}"
                         />
                     </StackPanel.InputBindings>
                 </StackPanel>
             </DataTemplate>
+
+            <DataTemplate x:Key="VideoTemplate">
+                <StackPanel>
+                    
+                </StackPanel>                
+            </DataTemplate>
+
+            <DataTemplate x:Key="FolderTemplate">
+                <StackPanel Width="{Binding DataContext.FileWidth, RelativeSource={RelativeSource AncestorType=UserControl}}">
+
+                    <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Rectangle Width="40" Height="5" Margin="5 0 0 0" HorizontalAlignment="Left" Fill="#FFF6D47E"/>
+                        <Rectangle HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                                Fill="#FFF6D47E" RadiusX="5" RadiusY="5" Grid.Row="1"/>
+                        <Image Source="{Binding ThumbnailPath, Converter={StaticResource ImageSourceConverter}}"
+                                Height="{Binding DataContext.FileMaxHeight}" Grid.Row="1" Margin="2"
+                                MaxHeight="{Binding DataContext.FileMaxHeight, RelativeSource={RelativeSource AncestorType=UserControl}}"/>
+                    </Grid>
+
+                    <TextBlock Text="{Binding FileName}"/>
+                    <StackPanel.InputBindings>
+                        <MouseBinding MouseAction="LeftDoubleClick"
+                                      Command="{Binding DataContext.FolderDubleClick, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                      CommandParameter="{Binding FullPath}"
+                        />
+                    </StackPanel.InputBindings>
+                </StackPanel>
+            </DataTemplate>
+            
+
 
             <selector:FileTypeTemplateSelector x:Key="FileTypeTemplateSelector"
                                    FileTemplate="{StaticResource FileTemplate}"

@@ -38,19 +38,37 @@ namespace TagManager.Models.EverythinModels
 
             foreach (var result in queryable)
             {
-                Results.FileList.Add(result);
-                Debug.Print(result.FullPath);
+                var fileItem = new FileItem(result);
+                fileItem.ThumbnailPath = CreateThumbnailPath(result);
+
+                Debug.Print(fileItem.ThumbnailPath);
+
+                Results.FileList.Add(fileItem);
+                //Debug.Print(result.FullPath);
             }
             stopwatch.Stop();
 
             Results.CurrentPath = searchPath;
             Results.SearchTime = stopwatch.ElapsedMilliseconds;
             Results.FileCount = queryable.Count;
+            
 
             Debug.Print(Results.SearchTime.ToString() + "ミリ秒");
             Debug.Print(Results.FileCount.ToString() + "件");
 
             return Results;
+
+        }
+
+
+        private string CreateThumbnailPath(ISearchResult searchResult)
+        {
+            if(searchResult.IsFile == true)
+            {
+                return PathProcessing.CreateFileThumbnailPath(searchResult.FullPath);
+            }
+
+            return PathProcessing.CreateFolderThumbnailPath(searchResult.FullPath);
 
         }
 

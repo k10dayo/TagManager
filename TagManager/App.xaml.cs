@@ -35,6 +35,9 @@ namespace TagManager
             containerRegistry.RegisterSingleton<EverythingModel>();
 
 
+            containerRegistry.RegisterDialog<SettingDialog>();
+
+
         }
     }
 }

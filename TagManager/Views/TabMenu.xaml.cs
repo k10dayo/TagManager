@@ -55,6 +55,7 @@ namespace TagManager.Views
                     Debug.Print("PlacementTargetがnullです。");
                 }
             }
+
         }
     }
 }

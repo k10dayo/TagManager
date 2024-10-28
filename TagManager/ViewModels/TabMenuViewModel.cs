@@ -43,7 +43,6 @@ namespace TagManager.ViewModels
         public DelegateCommand<object> DeleteTabButton { get; }
         public void DeleteTabButtonExecute(object parameter)
         {
-            Debug.Print("えええええ");
             Debug.Print(parameter.ToString());
         }
 

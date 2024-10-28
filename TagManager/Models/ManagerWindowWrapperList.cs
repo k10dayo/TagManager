@@ -115,7 +115,7 @@ namespace TagManager.Models
             }
 
 
-            ViewCollection.RemoveAt(1);
+            ViewCollection.RemoveAt(index);
 
         }
 

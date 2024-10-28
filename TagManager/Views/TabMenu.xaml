@@ -22,7 +22,7 @@
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
             <Button Content="+" Grid.Column="0" Command="{Binding AddViewButton}"/>
-            <Button Content="-" Grid.Column="1" Command="{Binding RemoveViewButton}"/>
+            <Button Content="★" Grid.Column="1" Command="{Binding RemoveViewButton}"/>
         </Grid>
 
         <ListBox Grid.Row="2" ItemsSource="{Binding ViewCollection}" HorizontalContentAlignment="Stretch" x:Name="Lst">
@@ -34,9 +34,9 @@
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="0.1*"/>
                         </Grid.ColumnDefinitions>
-                        
-                        <Label Background="Blue" Grid.Column="0" Height="100"/>
-                        <Label Content="{Binding CurrentPath}" Background="LightBlue" Grid.Column="1" x:Name="FolderPath"/>
+
+                        <Image Source="{Binding CurrentFolderThumbnailPath}" Grid.Column="0" MaxHeight="100" MaxWidth="50"/>
+                        <Label Content="{Binding CurrentFolderName}" Background="LightBlue" Grid.Column="1" x:Name="FolderPath"/>
                         <Grid.ContextMenu>
                             <ContextMenu Opened="OnContextMenuOpened">
                             </ContextMenu>

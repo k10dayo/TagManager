@@ -2,6 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,10 +17,26 @@ namespace TagManager.Models.EverythinModels
 
         }
 
-        public string CurrentPath { get; set; } = "";
+        private string _currentPath = "";
+        public string CurrentPath {
+            get { return _currentPath; }
+            set {
+                    _currentPath = value;
+                    OnCurrentPathChanged(value);
+            } 
+        }
+
+        public string ThumbnailPath { get; set; } = "";
         public long FileCount { get; set; } = 0;
         public long SearchTime { get; set; } = 0;
 
-        public ObservableCollection<ISearchResult> FileList { get; set; } = new ObservableCollection<ISearchResult>();
+        public ObservableCollection<FileItem> FileList { get; set; } = new ObservableCollection<FileItem>();
+
+
+        public event PropertyChangedEventHandler CurrentPathChanged;
+        protected virtual void OnCurrentPathChanged(string currentPaht)
+        {
+            CurrentPathChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(currentPaht)));
+        }
     }
 }

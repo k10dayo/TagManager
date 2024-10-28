@@ -2,6 +2,7 @@
 using Prism.Mvvm;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
@@ -25,9 +26,13 @@ namespace TagManager.ViewModels
             AccessNextButton = new DelegateCommand(AccessNextButtonExecute);
             AccessParentButton =new DelegateCommand(AccessParentButtonExecute);
 
+            PictureDubleClick = new DelegateCommand<object>(PictureDubleClickExecute);
             FolderDubleClick = new DelegateCommand<object>(FolderDubleClickExecute);
 
-            NewCurrentFolder("C:\\テストフォルダー\\file_manager_directory");
+            SearchData = new();
+
+            //UpdateHistory("C:\\テストフォルダー\\file_manager_directory");
+            UpdateHistory("D:");
         }        
 
         //ファイルの横幅
@@ -43,17 +48,26 @@ namespace TagManager.ViewModels
         {
             get { return _fileMaxHeight; }
             set { SetProperty(ref _fileMaxHeight, value); }
-        }
+        }       
 
-        //現在のデータ
-        private SearchData _searchData = new();
+
+        //カレントのファイルデータ
+        private SearchData _searchData;
         public SearchData SearchData
         {
             get { return _searchData; }
             set 
             { 
                 SetProperty(ref _searchData, value);
+                //カレントパスを通知
+                OnSearchDataChanged(value.CurrentPath);
             }
+        }
+        //通知用
+        public event PropertyChangedEventHandler SearchDataChanged;
+        protected virtual void OnSearchDataChanged(string propertyName)
+        {
+            SearchDataChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         //PathHistoryの現在のインデックス
@@ -87,7 +101,6 @@ namespace TagManager.ViewModels
         public DelegateCommand AccessNextButton { get; }
         public void AccessNextButtonExecute()
         {
-            Debug.Print("いええええええ");
             Debug.Print(HistoryIndex.ToString());
             if (PathHistory.Count != HistoryIndex + 1)
             {
@@ -104,7 +117,19 @@ namespace TagManager.ViewModels
         {
             string parentPath = Directory.GetParent(SearchData.CurrentPath).FullName;
             Debug.Print(parentPath);
-            NewCurrentFolder(parentPath);
+            UpdateHistory(parentPath);
+        }
+
+        //リストボックス内のピクチャーをダブルクリックした時の処理
+        public DelegateCommand<object> PictureDubleClick { get; }
+        public void PictureDubleClickExecute(object parameter)
+        {
+            string filePath = parameter as string;            
+
+            if (filePath != null)
+            {
+                StartProcess(filePath);
+            }
         }
 
         //リストボックス内のフォルダーをダブルクリックした時の処理
@@ -114,7 +139,7 @@ namespace TagManager.ViewModels
             string folderPath = parameter as string;
             if (folderPath != null)
             {
-                NewCurrentFolder(folderPath);
+                UpdateHistory(folderPath);
             }            
         }
 
@@ -127,14 +152,17 @@ namespace TagManager.ViewModels
             });
         }
 
-        public void NewCurrentFolder(string searchPath)
+        //履歴を更新する処理関数
+        public void UpdateHistory(string searchPath)
         {
             HistoryIndex++;
-            if (PathHistory.Count == HistoryIndex)//HistoryIndexがPathHistoryuの先頭にある場合はAddする　//HistoryuIndexは-1からCountは0から始まる
+            //HistoryIndexがPathHistoryuの先頭にある場合はAddする　//HistoryuIndexは-1からCountは0から始まる
+            if (PathHistory.Count == HistoryIndex)
             {
                 PathHistory.Add(searchPath);
             }
-            else//HistoryIndexがリストの先頭でないなら、次の要素を上書きする。
+            //HistoryIndexがリストの先頭でないなら、次の要素を上書きする。
+            else
             {
                 PathHistory[HistoryIndex] = searchPath;
             }            
@@ -153,6 +181,16 @@ namespace TagManager.ViewModels
             HistoryIndex--;
             var prevPath = PathHistory[HistoryIndex];
             ChangeCurrentFolder(prevPath);
+        }
+
+        //パスからアプリを開く
+        public void StartProcess(string filePath)
+        {
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = filePath,
+                UseShellExecute = true
+            });
         }
     }
 }
