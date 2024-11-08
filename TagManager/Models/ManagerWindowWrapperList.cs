@@ -86,7 +86,7 @@ namespace TagManager.Models
 
             Guid uniqueId = Guid.NewGuid();
 
-            var mww = new ManagerWindowWrapper("Folder" + ViewCollection.Count, view, uniqueId);
+            var mww = new ManagerWindowWrapper("Folderaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" + ViewCollection.Count, view, uniqueId);
 
             ViewCollection.Add(mww);
         }

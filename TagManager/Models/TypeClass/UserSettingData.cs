@@ -5,14 +5,18 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace TagManager.Models.TypeClass;
-public class ThumbnailData
+public class UserSettingData
 {
-    public ThumbnailData(string thumbnailFolderName, string folderThumbnail)
+    public UserSettingData(string basePath, string thumbnailFolderName, string folderThumbnail)
     {
+        BasePath = basePath;
+
         ThumbnailFolderName = thumbnailFolderName;
 
         FolderThumbnail = folderThumbnail;
     }
+
+    public string BasePath { get; set; }
     public string ThumbnailFolderName { get; set; }
 
     public string FolderThumbnail { get; set; }

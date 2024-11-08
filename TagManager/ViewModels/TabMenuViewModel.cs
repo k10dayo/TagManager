@@ -25,7 +25,8 @@ namespace TagManager.ViewModels
             ViewSelected = new DelegateCommand<object[]>(ViewSelectedExecute);
 
 
-            TestButton = new DelegateCommand<object>(TestButtonExecute);
+            DeleteTab = new DelegateCommand<object>(DeleteTabExecute);
+            DeplicateTab = new DelegateCommand<object>(DeplicateTabExecute);
 
         }
 
@@ -64,10 +65,9 @@ namespace TagManager.ViewModels
 
 
         // コマンドの定義
-        public DelegateCommand<object> TestButton { get; }
-
+        public DelegateCommand<object> DeleteTab { get; }
         // コマンドが実行されたときの処理
-        private void TestButtonExecute(object parameter)
+        private void DeleteTabExecute(object parameter)
         {
             if(parameter != null)
             {
@@ -76,6 +76,18 @@ namespace TagManager.ViewModels
                 Debug.Print(parameter.ToString());
                 _managerWindowWrapperList.RemoveManagerWindow(viewId);
             }            
+        }
+
+        public DelegateCommand<object> DeplicateTab { get; }
+        private void DeplicateTabExecute(object parameter)
+        {
+            if (parameter != null)
+            {
+                string currentPath = (string)parameter;
+
+                Debug.Print(parameter.ToString());
+                //_managerWindowWrapperList.RemoveManagerWindow(viewId);
+            }
         }
 
     }

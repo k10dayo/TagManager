@@ -31,8 +31,8 @@ namespace TagManager.ViewModels
 
             SearchData = new();
 
-            //UpdateHistory("C:\\テストフォルダー\\file_manager_directory");
-            UpdateHistory("D:");
+            UpdateHistory("C:\\テストフォルダー\\file_manager_directory");
+            //UpdateHistory("D:");
         }        
 
         //ファイルの横幅

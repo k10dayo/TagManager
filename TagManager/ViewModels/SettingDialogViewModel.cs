@@ -3,7 +3,9 @@ using Prism.Mvvm;
 using Prism.Services.Dialogs;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using TagManager.Models;
 
 namespace TagManager.ViewModels
 {
@@ -11,7 +13,8 @@ namespace TagManager.ViewModels
     {
         public SettingDialogViewModel()
         {
-
+            BasePath = UserSettingHandler.GetBasePath();
+            ClickSaveButton = new DelegateCommand(ClickSaveButtonExecute);
         }
 
 
@@ -25,5 +28,22 @@ namespace TagManager.ViewModels
         public void OnDialogClosed() { }
 
         public void OnDialogOpened(IDialogParameters parameters) { }
+
+
+        // TextBoxのバインディング用のプロパティ
+        private string _basePath;
+        public string BasePath
+        {
+            get { return _basePath; }
+            set { SetProperty(ref _basePath, value); }
+        }
+
+        public DelegateCommand ClickSaveButton { get; }
+        public void ClickSaveButtonExecute()
+        {
+            Debug.Print($"{BasePath}");
+
+            UserSettingHandler.SetBasePath(BasePath);
+        }
     }
 }

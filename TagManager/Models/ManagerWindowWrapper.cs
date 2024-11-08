@@ -31,12 +31,15 @@ namespace TagManager.Models
             };
         }
 
+        //
         private string _currentFolderName;
         public string CurrentFolderName
         {
             get { return _currentFolderName; }
             set { SetProperty(ref _currentFolderName, value); }
         }
+
+        //
         private string _currentFolderThumbnailPath;
         public string CurrentFolderThumbnailPath
         {

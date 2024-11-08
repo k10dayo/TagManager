@@ -27,10 +27,6 @@
             <DataTemplate x:Key="PictureTemplate">
                 <StackPanel Width="{Binding DataContext.FileWidth, RelativeSource={RelativeSource AncestorType=UserControl}}">
 
-                    <!--<Image Source="{Binding FullPath}"
-                               MaxHeight="{Binding DataContext.FileMaxHeight, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                               Grid.Row="1"
-                        />-->
                     <Image Source="{Binding ThumbnailPath, Converter={StaticResource ImageSourceConverter}}"
                         Height="{Binding DataContext.FileMaxHeight}" Grid.Row="1" Margin="2"
                         MaxHeight="{Binding DataContext.FileMaxHeight, RelativeSource={RelativeSource AncestorType=UserControl}}"/>
@@ -91,7 +87,7 @@
     
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="0.15*"  MaxHeight="100"/>
+            <RowDefinition Height="0.1*"  MaxHeight="100"/>
             <RowDefinition Height="0.05*"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>

@@ -34,16 +34,34 @@ namespace TagManager.Views
                     // dataContextがnullでない場合
                     if (dataContext != null)
                     {
-                        // MenuItemを作成
-                        MenuItem menuItem = new MenuItem
-                        {
-                            Header = "削除する",
-                            Command = (contextMenu.DataContext as TabMenuViewModel)?.TestButton,
-                            CommandParameter = dataContext.ViewId // ここでCommandParameterを設定
-                        };
+                        // 既存のアイテムをクリア
+                        contextMenu.Items.Clear();
 
-                        contextMenu.Items.Clear(); // 既存のアイテムをクリア
-                        contextMenu.Items.Add(menuItem);
+                        //MenuItemを作成
+                        contextMenu.Items.Add(
+                            new MenuItem
+                            {
+                                Header = "削除する",
+                                Command = (contextMenu.DataContext as TabMenuViewModel)?.DeleteTab,
+                                CommandParameter = dataContext.ViewId // ここでCommandParameterを設定
+                            }
+                        );
+                        contextMenu.Items.Add(
+                            new MenuItem
+                            {
+                                Header = "お気に入りに登録",
+                                Command = (contextMenu.DataContext as TabMenuViewModel)?.DeleteTab,
+                                CommandParameter = dataContext.ViewId // ここでCommandParameterを設定
+                            }
+                        );
+                        contextMenu.Items.Add(
+                            new MenuItem
+                            {
+                                Header = "タブの複製",
+                                Command = (contextMenu.DataContext as TabMenuViewModel)?.DeleteTab,
+                                CommandParameter = dataContext.CurrentPath // ここでCommandParameterを設定
+                            }
+                        );
                     }
                     else
                     {
