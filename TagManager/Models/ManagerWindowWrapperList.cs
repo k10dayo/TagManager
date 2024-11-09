@@ -1,4 +1,5 @@
 ﻿using Prism.Mvvm;
+using Prism.Services.Dialogs;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -18,11 +19,17 @@ namespace TagManager.Models
     {
         CommonProperty _commonProperty;
         EverythingModel _everythingModel;
+        private readonly IDialogService _dialogService;
         //コンストラクタ
-        public ManagerWindowWrapperList(CommonProperty commonProperty, EverythingModel everythingModel)
+        public ManagerWindowWrapperList(CommonProperty commonProperty, EverythingModel everythingModel, IDialogService dialogService)
         {
             _commonProperty = commonProperty;
             _everythingModel = everythingModel;
+            if(dialogService == null)
+            {
+                Debug.Print("なぜぬるなん？？");
+            }
+            _dialogService = dialogService;
         }
 
         //選択中のListIndex
@@ -81,12 +88,26 @@ namespace TagManager.Models
         {
             var view = new TagManager.Views.ManagerWindow 
             {
-                DataContext = new ManagerWindowViewModel(_commonProperty, _everythingModel)
+                DataContext = new ManagerWindowViewModel(_commonProperty, _everythingModel, _dialogService)
             };
 
             Guid uniqueId = Guid.NewGuid();
 
-            var mww = new ManagerWindowWrapper("Folderaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" + ViewCollection.Count, view, uniqueId);
+            var mww = new ManagerWindowWrapper(view, uniqueId);
+
+            ViewCollection.Add(mww);
+        }
+        //新しいマネージャービューをリストに追加する関数
+        public void AddManagerWindow(string path)
+        {
+            var view = new TagManager.Views.ManagerWindow
+            {
+                DataContext = new ManagerWindowViewModel(_commonProperty, _everythingModel, _dialogService, path)
+            };
+
+            Guid uniqueId = Guid.NewGuid();
+
+            var mww = new ManagerWindowWrapper(view, uniqueId);
 
             ViewCollection.Add(mww);
         }
@@ -114,7 +135,6 @@ namespace TagManager.Models
                 }
             }
 
-
             ViewCollection.RemoveAt(index);
 
         }
@@ -124,9 +144,7 @@ namespace TagManager.Models
         {
             SelectedViewId = mww.ViewId;
             SelectedManagerWindow = mww.ManagerWindow;
-        }
-
-       
+        }       
         
     }
 }

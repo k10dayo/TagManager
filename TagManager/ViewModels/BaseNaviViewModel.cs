@@ -66,7 +66,7 @@ namespace TagManager.ViewModels
         public ManagerWindow SelectedManagerWindow => _managerWindowWrapperList.SelectedManagerWindow;
 
 
-        //ナビボタンをクリックしたときの処理
+        //設定ボタンをクリックしたときの処理
         public DelegateCommand SettingButtonClick { get; }
         public void SettingButtonClickExecute()
         {

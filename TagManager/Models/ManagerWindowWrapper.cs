@@ -15,9 +15,8 @@ namespace TagManager.Models
     //一つのタブマネージャー
     public class ManagerWindowWrapper : BindableBase
     {
-        public ManagerWindowWrapper(string currentPath, ManagerWindow managerWindow, Guid viewId)
+        public ManagerWindowWrapper( ManagerWindow managerWindow, Guid viewId)
         {
-            CurrentPath = currentPath;
             ManagerWindow = managerWindow;
             ViewId = viewId;
 
@@ -43,8 +42,8 @@ namespace TagManager.Models
         private string _currentFolderThumbnailPath;
         public string CurrentFolderThumbnailPath
         {
-            get { return _currentFolderName; }
-            set { SetProperty(ref _currentFolderName, value); }
+            get { return _currentFolderThumbnailPath; }
+            set { SetProperty(ref _currentFolderThumbnailPath, value); }
         }
 
         //カレントパス
@@ -52,7 +51,7 @@ namespace TagManager.Models
         public string CurrentPath
         { 
             get { return _currentPath; } 
-            set { _currentPath = value; } 
+            set { SetProperty(ref _currentPath, value); } 
         }
 
         //ビュー実体
@@ -73,6 +72,7 @@ namespace TagManager.Models
         
         private void ChangeCurrentFolder(string currentPath)
         {
+            CurrentPath = currentPath;
             CurrentFolderName = TagManager.Models.EverythinModels.PathProcessing.GetFileName(currentPath);
             CurrentFolderThumbnailPath = TagManager.Models.EverythinModels.PathProcessing.CreateFolderThumbnailPath(currentPath);
         }

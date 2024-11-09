@@ -86,7 +86,7 @@ namespace TagManager.ViewModels
                 string currentPath = (string)parameter;
 
                 Debug.Print(parameter.ToString());
-                //_managerWindowWrapperList.RemoveManagerWindow(viewId);
+                _managerWindowWrapperList.AddManagerWindow(currentPath);
             }
         }
 

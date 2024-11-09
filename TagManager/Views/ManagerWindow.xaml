@@ -88,7 +88,7 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="0.1*"  MaxHeight="100"/>
-            <RowDefinition Height="0.05*"/>
+            <RowDefinition Height="25"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Grid Grid.Row="0" Background="Gray" Height="Auto" x:Name="ManagerHeader">
@@ -105,9 +105,11 @@
             <Button Content="→" Grid.Column="3" Style="{StaticResource defaultButtonStyle}" Command="{Binding AccessNextButton}"/>
             <Button Content="↑" Grid.Column="4" Style="{StaticResource defaultButtonStyle}" Command="{Binding AccessParentButton}"/>
         </Grid>
-        <Grid Grid.Row="1">
-            <Label Background="LightGray"/>
-        </Grid>
+        <DockPanel Grid.Row="1" LastChildFill="True">
+            <Button Content="詳細検索" MinWidth="100" DockPanel.Dock="Right" Command="{Binding AdvancedSearchButton}"/>
+            <Button Content="検索" MinWidth="100" DockPanel.Dock="Right" Command="{Binding SearchButton}"/>
+            <TextBox FontSize="15" TextAlignment="Left"/>
+        </DockPanel>
         <Grid Grid.Row="2" x:Name="ManagerListGrid">
 
             <ListBox Grid.Row="2" ItemsSource="{Binding SearchData.FileList}"

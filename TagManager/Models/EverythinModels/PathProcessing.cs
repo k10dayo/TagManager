@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.DirectoryServices;
 using System.IO;
 using System.Linq;
@@ -13,6 +14,7 @@ namespace TagManager.Models.EverythinModels
 
         public static string GetFileName(string fullPath)
         {
+            Debug.Print(Path.GetFileName(fullPath));
             return Path.GetFileName(fullPath);
         }
 

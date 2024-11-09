@@ -36,6 +36,8 @@ namespace TagManager
 
 
             containerRegistry.RegisterDialog<SettingDialog>();
+            containerRegistry.RegisterDialog<AdvancedSearchDialog, AdvancedSearchDialogViewModel>();
+
 
 
         }

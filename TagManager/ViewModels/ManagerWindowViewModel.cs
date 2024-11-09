@@ -1,5 +1,6 @@
 ﻿using Prism.Commands;
 using Prism.Mvvm;
+using Prism.Services.Dialogs;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -9,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Documents;
 using TagManager.Models;
 using TagManager.Models.EverythinModels;
+using TagManager.Views;
 
 namespace TagManager.ViewModels
 {
@@ -16,24 +18,37 @@ namespace TagManager.ViewModels
     {
         CommonProperty _commonProperty;
         EverythingModel _everythingModel;
-        public ManagerWindowViewModel(CommonProperty commonProperty, EverythingModel everythingModel)
+        private readonly IDialogService _dialogService;
+        public ManagerWindowViewModel(CommonProperty commonProperty, EverythingModel everythingModel,IDialogService dialogService, string path = "")
         {
             _commonProperty = commonProperty;
             _everythingModel = everythingModel;
+            _dialogService = dialogService;
+
             NaviButtonClick = new DelegateCommand(NaviButtonClickExecute);
 
             AccessPrevButton = new DelegateCommand(AccessPrevButtonExecute);
             AccessNextButton = new DelegateCommand(AccessNextButtonExecute);
             AccessParentButton =new DelegateCommand(AccessParentButtonExecute);
 
+            AdvancedSearchButton = new DelegateCommand(AdvancedSearchButtonExecute);
+
             PictureDubleClick = new DelegateCommand<object>(PictureDubleClickExecute);
             FolderDubleClick = new DelegateCommand<object>(FolderDubleClickExecute);
 
             SearchData = new();
 
-            UpdateHistory("C:\\テストフォルダー\\file_manager_directory");
-            //UpdateHistory("D:");
-        }        
+            if (path == "" || !Directory.Exists(path))
+            {
+                UpdateHistory(UserSettingHandler.GetBasePath());
+                //UpdateHistory("C:\\テストフォルダー\\file_manager_directory");
+                //UpdateHistory("D:");
+            }
+            else
+            {
+                UpdateHistory(path);
+            }
+        }
 
         //ファイルの横幅
         private int _fileWidth = 100;
@@ -120,6 +135,39 @@ namespace TagManager.ViewModels
             UpdateHistory(parentPath);
         }
 
+        
+        //詳細な検索ボタン
+        public DelegateCommand AdvancedSearchButton { get; }
+        public void AdvancedSearchButtonExecute()
+        {
+            var parameters = new DialogParameters
+            {
+                { "paramKey", "パラメーター"}
+            };
+
+            _dialogService.ShowDialog(nameof(AdvancedSearchDialog), parameters, r =>
+            {
+                if (r.Result == ButtonResult.OK)
+                {
+                    // OKボタンが押された場合
+                    var result = r.Parameters.GetValue<string>("resultParam");
+                    // 結果を処理
+                    Debug.Print($"検索結果: {result}");
+                }
+                else if (r.Result == ButtonResult.Cancel)
+                {
+                    // キャンセルボタンが押された場合
+                    Debug.Print("検索がキャンセルされました");
+                }
+            });
+        }
+        //検索ボタン
+        public DelegateCommand SearchButton { get; }
+        public void SearchButtonExecute()
+        {
+
+        }
+
         //リストボックス内のピクチャーをダブルクリックした時の処理
         public DelegateCommand<object> PictureDubleClick { get; }
         public void PictureDubleClickExecute(object parameter)
@@ -183,7 +231,7 @@ namespace TagManager.ViewModels
             ChangeCurrentFolder(prevPath);
         }
 
-        //パスからアプリを開く
+        //パスからアプリを開く(ファイルをクリックしたときの処理）
         public void StartProcess(string filePath)
         {
             Process.Start(new ProcessStartInfo

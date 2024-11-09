@@ -7,6 +7,12 @@
     <StackPanel>
         <TextBlock Text="ベースパス"/>
         <TextBox Text="{Binding BasePath, UpdateSourceTrigger=PropertyChanged}"/>
+        <TextBlock Text="サムネイルフォルダ"/>
+        <TextBox/>
+        <TextBlock Text="フォルダ用サムネイル名"/>
+        <TextBox/>
+        <TextBlock Text="タグフォルダパス"/>
+        <TextBox/>
         <Button Content="保存" FontSize="20" Command="{Binding ClickSaveButton}"/>
     </StackPanel>
 </UserControl>

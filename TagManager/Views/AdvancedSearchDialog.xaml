@@ -1,0 +1,29 @@
+﻿<UserControl x:Class="TagManager.Views.AdvancedSearchDialog"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:prism="http://prismlibrary.com/"             
+             prism:ViewModelLocator.AutoWireViewModel="True"
+             xmlns:local="clr-namespace:TagManager.ViewModels"
+             xmlns:converter="clr-namespace:TagManager.Views.Converter"
+             xmlns:myControl="clr-namespace:TagManager.Views.MyControl"
+             >
+
+    <StackPanel>
+        <TextBlock Text="詳細な検索"/>
+
+        
+        <Grid>
+            <ItemsControl x:Name="ExpanderList" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ItemsSource="{Binding Nodes}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <myControl:TagExpander DataContext="{Binding}"/>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </Grid>
+
+
+        <Button Content="OK" Command="{Binding OkCommand}" />
+        <Button Content="キャンセル" Command="{Binding CancelCommand}" />
+    </StackPanel>
+</UserControl>
