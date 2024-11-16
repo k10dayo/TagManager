@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TagManager.Models.TypeClass.SearchInfo;
 
 namespace TagManager.Models.EverythinModels
 {
@@ -16,60 +17,86 @@ namespace TagManager.Models.EverythinModels
         private readonly IEverything everything = new Everything();        
 
         //Everythinで検索する関数　SearchDataを返す
-        public SearchData SearchExecute(string searchPath)
+        public SearchData SearchExecute(ISearchInfo searchInfo)
         {
-            if (!EverythingState.IsStarted())
-                EverythingState.StartService(true, EverythingState.StartMode.Service); 
-
-            everything.Reset();
+            EnsureServiceStarted();
 
             var stopwatch = new Stopwatch();
             stopwatch.Start();
 
-            string completPath = "parent:" + searchPath;
-
-
             var queryable = everything
                             .Search()
                             .Name
-                            .Contains(completPath);
+                            .Contains(searchInfo.Command);
 
-            SearchData Results = new SearchData();
+            SearchData results = new SearchData();
 
             foreach (var result in queryable)
             {
                 var fileItem = new FileItem(result);
-                fileItem.ThumbnailPath = CreateThumbnailPath(result);
+                fileItem.ThumbnailPath = PathProcessing.CreateThumbnailPath(result);
 
                 Debug.Print(fileItem.ThumbnailPath);
 
-                Results.FileList.Add(fileItem);
+                results.FileList.Add(fileItem);
                 //Debug.Print(result.FullPath);
             }
+
             stopwatch.Stop();
 
-            Results.CurrentPath = searchPath;
-            Results.SearchTime = stopwatch.ElapsedMilliseconds;
-            Results.FileCount = queryable.Count;
-            
+            results.CurrentPath = searchInfo.FullLabel;
 
-            Debug.Print(Results.SearchTime.ToString() + "ミリ秒");
-            Debug.Print(Results.FileCount.ToString() + "件");
+            results.SearchInfo = searchInfo;
 
-            return Results;
+            results.SearchTime = stopwatch.ElapsedMilliseconds;
+            results.FileCount = queryable.Count;            
 
+            Debug.Print(results.SearchTime.ToString() + "ミリ秒");
+            Debug.Print(results.FileCount.ToString() + "件");
+
+            return results;
+
+        }        
+
+        /// <summary>
+        ///     レイヤー検索用にフルパスを加工する
+        /// </summary>
+        public static LayerSearchInfo CreateLayerSearchCommand(string searchPath)
+        {
+            string fileName = PathProcessing.GetFileName(searchPath);
+            string layerSearchCommand =
+                "\"" + UserSettingHandler.GetBasePath() + "\"" + " " +
+                "parent:" + "\"" + searchPath + "\"";
+
+            string Thumbnail = PathProcessing.CreateFolderThumbnailPathPublic(searchPath);
+
+            return new LayerSearchInfo(fileName, searchPath, layerSearchCommand, Thumbnail);
         }
 
-
-        private string CreateThumbnailPath(ISearchResult searchResult)
+        /// <summary>
+        ///     ポイント検索用にコマンドを加工する
+        /// </summary>
+        public static PointSearchInfo CreatePointSearchCommand(string searchCommand)
         {
-            if(searchResult.IsFile == true)
-            {
-                return PathProcessing.CreateFileThumbnailPath(searchResult.FullPath);
-            }
+            string label = "検索：" + searchCommand;
+            string fullLabel = "検索：" + searchCommand;
 
-            return PathProcessing.CreateFolderThumbnailPath(searchResult.FullPath);
+            string pointSearchCommand =
+                "\"" + UserSettingHandler.GetBasePath() + "\"" + " " +
+                searchCommand ;
 
+            return new PointSearchInfo(label, fullLabel, pointSearchCommand, "");
+        }
+
+        /// <summary>
+        ///     検索の前準備、サービスがスタートしていることを保証する
+        /// </summary>
+        private void EnsureServiceStarted()
+        {
+            if (!EverythingState.IsStarted())
+                EverythingState.StartService(true, EverythingState.StartMode.Service);
+
+            everything.Reset();
         }
 
     }

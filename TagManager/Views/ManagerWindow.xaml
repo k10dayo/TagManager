@@ -108,7 +108,7 @@
         <DockPanel Grid.Row="1" LastChildFill="True">
             <Button Content="詳細検索" MinWidth="100" DockPanel.Dock="Right" Command="{Binding AdvancedSearchButton}"/>
             <Button Content="検索" MinWidth="100" DockPanel.Dock="Right" Command="{Binding SearchButton}"/>
-            <TextBox FontSize="15" TextAlignment="Left"/>
+            <TextBox Text="{Binding SearchTextBox}" FontSize="15" TextAlignment="Left"/>
         </DockPanel>
         <Grid Grid.Row="2" x:Name="ManagerListGrid">
 

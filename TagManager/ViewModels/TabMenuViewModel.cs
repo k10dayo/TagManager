@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Windows.Data;
 using TagManager.Models;
+using TagManager.Models.TypeClass.SearchInfo;
 using TagManager.Views;
 using static TagManager.ViewModels.ManagerWindowViewModel;
 
@@ -83,7 +84,7 @@ namespace TagManager.ViewModels
         {
             if (parameter != null)
             {
-                string currentPath = (string)parameter;
+                ISearchInfo currentPath = (ISearchInfo)parameter;
 
                 Debug.Print(parameter.ToString());
                 _managerWindowWrapperList.AddManagerWindow(currentPath);

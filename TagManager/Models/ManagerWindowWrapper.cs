@@ -1,12 +1,6 @@
 ﻿using Prism.Mvvm;
 using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Data;
+using TagManager.Models.TypeClass.SearchInfo;
 using TagManager.ViewModels;
 using TagManager.Views;
 
@@ -23,27 +17,19 @@ namespace TagManager.Models
             //作ったManagerWindowViewModelのSearchDataが変わったら通知を受けるのを購読
             (ManagerWindow.DataContext as ManagerWindowViewModel).SearchDataChanged += (s, e) =>
             {
-                if (e.PropertyName != null)
+                if (e != null)
                 {
-                    ChangeCurrentFolder(e.PropertyName);
+                    ISearchInfo searchInfo = e.SearchInfo;
+                    SearchInfo = searchInfo;
                 }
             };
         }
 
-        //
-        private string _currentFolderName;
-        public string CurrentFolderName
+        private ISearchInfo _searchInfo;
+        public ISearchInfo SearchInfo
         {
-            get { return _currentFolderName; }
-            set { SetProperty(ref _currentFolderName, value); }
-        }
-
-        //
-        private string _currentFolderThumbnailPath;
-        public string CurrentFolderThumbnailPath
-        {
-            get { return _currentFolderThumbnailPath; }
-            set { SetProperty(ref _currentFolderThumbnailPath, value); }
+            get { return _searchInfo; }
+            set { SetProperty(ref _searchInfo, value); }
         }
 
         //カレントパス
@@ -68,13 +54,6 @@ namespace TagManager.Models
             get { return _viewId; }
             set { _viewId = value; }
         }
-
-        
-        private void ChangeCurrentFolder(string currentPath)
-        {
-            CurrentPath = currentPath;
-            CurrentFolderName = TagManager.Models.EverythinModels.PathProcessing.GetFileName(currentPath);
-            CurrentFolderThumbnailPath = TagManager.Models.EverythinModels.PathProcessing.CreateFolderThumbnailPath(currentPath);
-        }
+    
     }
 }

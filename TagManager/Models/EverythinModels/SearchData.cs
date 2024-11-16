@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TagManager.Models.TypeClass.SearchInfo;
 
 namespace TagManager.Models.EverythinModels
 {
@@ -24,6 +25,13 @@ namespace TagManager.Models.EverythinModels
                     _currentPath = value;
                     OnCurrentPathChanged(value);
             } 
+        }
+
+        private ISearchInfo _searchInfo;
+        public ISearchInfo SearchInfo
+        {
+            get { return _searchInfo; }
+            set { _searchInfo = value;}
         }
 
         public string ThumbnailPath { get; set; } = "";

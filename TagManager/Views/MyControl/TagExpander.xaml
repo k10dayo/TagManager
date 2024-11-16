@@ -36,12 +36,17 @@
 
                 <!--子ファイルを表示-->
                 <ListBox ItemsSource="{Binding ChildrenFile}" Margin="20,0,20,0">
+                    <ListBox.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel/>
+                        </ItemsPanelTemplate>
+                    </ListBox.ItemsPanel>
+                    
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <StackPanel>
+                                <Label Width="50" Height="50" Background="Aqua"/>
                                 <TextBlock Text="{Binding FileName}" Margin="5"/>
-                                <TextBlock Text="{Binding FileSize, StringFormat={}{0} bytes}" Margin="5"/>
-                                <TextBlock Text="{Binding FileType}" Margin="5"/>
                             </StackPanel>
                         </DataTemplate>
                     </ListBox.ItemTemplate>

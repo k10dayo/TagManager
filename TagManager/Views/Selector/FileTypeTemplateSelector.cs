@@ -37,8 +37,6 @@ public class FileTypeTemplateSelector : DataTemplateSelector
             }
             return FileTemplate;
         }
-        Debug.Print("ああああああああああああ");
-        Debug.Print(fileItem.ThumbnailPath);
         return FolderTemplate;
         
         

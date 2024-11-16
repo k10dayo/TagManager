@@ -59,7 +59,7 @@ namespace TagManager.Views
                             {
                                 Header = "タブの複製",
                                 Command = (contextMenu.DataContext as TabMenuViewModel)?.DeplicateTab,
-                                CommandParameter = dataContext.CurrentPath // ここでCommandParameterを設定
+                                CommandParameter = dataContext.SearchInfo // ここでCommandParameterを設定
                             }
                         );
                     }

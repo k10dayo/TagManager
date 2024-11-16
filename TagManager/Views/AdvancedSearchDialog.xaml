@@ -6,24 +6,40 @@
              xmlns:local="clr-namespace:TagManager.ViewModels"
              xmlns:converter="clr-namespace:TagManager.Views.Converter"
              xmlns:myControl="clr-namespace:TagManager.Views.MyControl"
+             MinHeight="800" MinWidth="700"
              >
 
-    <StackPanel>
-        <TextBlock Text="詳細な検索"/>
-
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.1*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="50"/>
+        </Grid.RowDefinitions>
         
-        <Grid>
-            <ItemsControl x:Name="ExpanderList" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ItemsSource="{Binding Nodes}">
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <myControl:TagExpander DataContext="{Binding}"/>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
+        
+        <TextBlock Text="詳細な検索" Grid.Row="0"/>
+        
+        <Grid Grid.Row="1">
+            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                <ItemsControl x:Name="ExpanderList" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ItemsSource="{Binding Nodes}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <myControl:TagExpander DataContext="{Binding}"/>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
         </Grid>
 
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Button Content="キャンセル" Command="{Binding CancelCommand}" Grid.Column="0" Margin="10, 5"/>
+            <Button Content="OK" Command="{Binding OkCommand}" Grid.Column="1"  Margin="10, 5"/>
 
-        <Button Content="OK" Command="{Binding OkCommand}" />
-        <Button Content="キャンセル" Command="{Binding CancelCommand}" />
-    </StackPanel>
+        </Grid>        
+        
+    </Grid>
 </UserControl>

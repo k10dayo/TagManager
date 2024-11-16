@@ -1,15 +1,14 @@
 ﻿using Prism.Commands;
 using Prism.Mvvm;
 using Prism.Services.Dialogs;
+using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
-using System.Windows.Documents;
 using TagManager.Models;
 using TagManager.Models.EverythinModels;
+using TagManager.Models.TypeClass.SearchInfo;
 using TagManager.Views;
 
 namespace TagManager.ViewModels
@@ -19,7 +18,7 @@ namespace TagManager.ViewModels
         CommonProperty _commonProperty;
         EverythingModel _everythingModel;
         private readonly IDialogService _dialogService;
-        public ManagerWindowViewModel(CommonProperty commonProperty, EverythingModel everythingModel,IDialogService dialogService, string path = "")
+        public ManagerWindowViewModel(CommonProperty commonProperty, EverythingModel everythingModel,IDialogService dialogService, ISearchInfo searchInfo = null)
         {
             _commonProperty = commonProperty;
             _everythingModel = everythingModel;
@@ -31,6 +30,7 @@ namespace TagManager.ViewModels
             AccessNextButton = new DelegateCommand(AccessNextButtonExecute);
             AccessParentButton =new DelegateCommand(AccessParentButtonExecute);
 
+            SearchButton = new DelegateCommand(SearchButtonExecute);
             AdvancedSearchButton = new DelegateCommand(AdvancedSearchButtonExecute);
 
             PictureDubleClick = new DelegateCommand<object>(PictureDubleClickExecute);
@@ -38,16 +38,15 @@ namespace TagManager.ViewModels
 
             SearchData = new();
 
-            if (path == "" || !Directory.Exists(path))
+            if (searchInfo != null)
             {
-                UpdateHistory(UserSettingHandler.GetBasePath());
-                //UpdateHistory("C:\\テストフォルダー\\file_manager_directory");
-                //UpdateHistory("D:");
+                UpdateHistory(searchInfo);
+                return;
             }
-            else
-            {
-                UpdateHistory(path);
-            }
+
+            string searchPath = UserSettingHandler.GetBasePath();
+            LayerSearch(searchPath);
+
         }
 
         //ファイルの横幅
@@ -63,8 +62,7 @@ namespace TagManager.ViewModels
         {
             get { return _fileMaxHeight; }
             set { SetProperty(ref _fileMaxHeight, value); }
-        }       
-
+        }
 
         //カレントのファイルデータ
         private SearchData _searchData;
@@ -72,49 +70,58 @@ namespace TagManager.ViewModels
         {
             get { return _searchData; }
             set 
-            { 
+            {
+                //viewに通知
                 SetProperty(ref _searchData, value);
-                //カレントパスを通知
-                OnSearchDataChanged(value.CurrentPath);
+                //タブメニューにカレントパスを通知
+                OnSearchDataChanged(value.SearchInfo);
             }
         }
         //通知用
-        public event PropertyChangedEventHandler SearchDataChanged;
-        protected virtual void OnSearchDataChanged(string propertyName)
+        public event EventHandler<SearchInfoChangedEventArgs> SearchDataChanged;
+        protected virtual void OnSearchDataChanged(ISearchInfo propertyName)
         {
-            SearchDataChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            SearchDataChanged?.Invoke(this, new SearchInfoChangedEventArgs(propertyName));
         }
 
         //PathHistoryの現在のインデックス
         private int HistoryIndex { get; set; } = -1;
+
         //pathの履歴
-        private List<string> _pathHistory = new();
-        public List<string> PathHistory
+        private List<ISearchInfo> _pathHistory = new();
+        private List<ISearchInfo> PathHistory
         {
             get { return _pathHistory; }
             set { _pathHistory = value; }
         }
 
+        private string _searchTextBox = "";
+        public string SearchTextBox
+        {
+            get { return _searchTextBox; }
+            set { SetProperty(ref _searchTextBox, value); }
+        }
+
 
         //ナビボタンをクリックしたときの処理
         public DelegateCommand NaviButtonClick { get; }
-        public void NaviButtonClickExecute()
+        private void NaviButtonClickExecute()
         {
             _commonProperty.toggleIsNaviOpen();
         }
 
         //一つ戻るボタン
         public DelegateCommand AccessPrevButton {  get; }
-        public void AccessPrevButtonExecute()
+        private void AccessPrevButtonExecute()
         {
             if (HistoryIndex > 0)
             {
                 PrevCurrentFolder();
             }            
         }
-        //一つ戻るボタン
+        //次へボタン
         public DelegateCommand AccessNextButton { get; }
-        public void AccessNextButtonExecute()
+        private void AccessNextButtonExecute()
         {
             Debug.Print(HistoryIndex.ToString());
             if (PathHistory.Count != HistoryIndex + 1)
@@ -128,17 +135,22 @@ namespace TagManager.ViewModels
 
         //階層を上に上がるボタン
         public DelegateCommand AccessParentButton { get; }
-        public void AccessParentButtonExecute()
+        private void AccessParentButtonExecute()
         {
+            if(SearchData.SearchInfo is PointSearchInfo)
+            {
+                BaseSearch();
+                return;
+            }
+
             string parentPath = Directory.GetParent(SearchData.CurrentPath).FullName;
-            Debug.Print(parentPath);
-            UpdateHistory(parentPath);
+            LayerSearch(parentPath);
         }
 
         
         //詳細な検索ボタン
         public DelegateCommand AdvancedSearchButton { get; }
-        public void AdvancedSearchButtonExecute()
+        private void AdvancedSearchButtonExecute()
         {
             var parameters = new DialogParameters
             {
@@ -163,14 +175,15 @@ namespace TagManager.ViewModels
         }
         //検索ボタン
         public DelegateCommand SearchButton { get; }
-        public void SearchButtonExecute()
+        private void SearchButtonExecute()
         {
-
+            var searchCommand = SearchTextBox;
+            PointSearch(searchCommand);
         }
 
         //リストボックス内のピクチャーをダブルクリックした時の処理
         public DelegateCommand<object> PictureDubleClick { get; }
-        public void PictureDubleClickExecute(object parameter)
+        private void PictureDubleClickExecute(object parameter)
         {
             string filePath = parameter as string;            
 
@@ -182,49 +195,49 @@ namespace TagManager.ViewModels
 
         //リストボックス内のフォルダーをダブルクリックした時の処理
         public DelegateCommand<object> FolderDubleClick { get; }
-        public void FolderDubleClickExecute(object parameter)
+        private void FolderDubleClickExecute(object parameter)
         {
             string folderPath = parameter as string;
             if (folderPath != null)
             {
-                UpdateHistory(folderPath);
+                LayerSearch(folderPath);
             }            
         }
 
         //カレントフォルダーを移動する関数
-        public async void ChangeCurrentFolder(string searchPath)
+        private async void ChangeCurrentFolder(ISearchInfo searchInfo)
         {
             SearchData = await Task.Run(() =>
             {
-                return _everythingModel.SearchExecute(searchPath);
+                return _everythingModel.SearchExecute(searchInfo);
             });
         }
 
         //履歴を更新する処理関数
-        public void UpdateHistory(string searchPath)
+        private void UpdateHistory(ISearchInfo searchInfo)
         {
             HistoryIndex++;
-            //HistoryIndexがPathHistoryuの先頭にある場合はAddする　//HistoryuIndexは-1からCountは0から始まる
+            //HistoryIndexがPathHistoryの先頭にある場合はAddする　//HistoryuIndexは-1からCountは0から始まる
             if (PathHistory.Count == HistoryIndex)
             {
-                PathHistory.Add(searchPath);
+                PathHistory.Add(searchInfo);
             }
             //HistoryIndexがリストの先頭でないなら、次の要素を上書きする。
             else
             {
-                PathHistory[HistoryIndex] = searchPath;
+                PathHistory[HistoryIndex] = searchInfo;
             }            
             
-            ChangeCurrentFolder(searchPath);
+            ChangeCurrentFolder(searchInfo);
         }
         //次に
-        public void NextCurrentFolder()
+        private void NextCurrentFolder()
         {
             HistoryIndex++;
             var nextPath = PathHistory[HistoryIndex];
             ChangeCurrentFolder(nextPath);
         }
-        public void PrevCurrentFolder()
+        private void PrevCurrentFolder()
         {
             HistoryIndex--;
             var prevPath = PathHistory[HistoryIndex];
@@ -232,13 +245,52 @@ namespace TagManager.ViewModels
         }
 
         //パスからアプリを開く(ファイルをクリックしたときの処理）
-        public void StartProcess(string filePath)
+        private void StartProcess(string filePath)
         {
             Process.Start(new ProcessStartInfo
             {
                 FileName = filePath,
                 UseShellExecute = true
             });
+        }
+
+        /// <summary>
+        ///     レイヤー検索を行う　※レイヤー検索　階層のある検索　フルパスでの検索
+        /// </summary>
+        private void LayerSearch(string searchPath)
+        {            
+            string basePath = UserSettingHandler.GetBasePath();
+            if (!searchPath.Contains(basePath))
+            {
+                //BaseSearch();
+                return;
+            }
+
+            LayerSearchInfo searchInfo = EverythingModel.CreateLayerSearchCommand(searchPath);
+            UpdateHistory(searchInfo);
+        }
+
+        private void PointSearch(string searchCommand)
+        {
+            PointSearchInfo searchInfo = EverythingModel.CreatePointSearchCommand(searchCommand);
+            UpdateHistory(searchInfo);
+        }
+
+        private void BaseSearch()
+        {
+            BaseSearchInfo searchInfo = new BaseSearchInfo();
+            UpdateHistory(searchInfo);
+        }
+    }
+
+    //通知用内部クラス
+    public class SearchInfoChangedEventArgs : EventArgs
+    {
+        public ISearchInfo SearchInfo { get; }
+
+        public SearchInfoChangedEventArgs(ISearchInfo searchInfo)
+        {
+            SearchInfo = searchInfo;
         }
     }
 }

@@ -92,8 +92,8 @@ namespace TagManager.ViewModels
                             {
                                 ChildrenFile = new ObservableCollection<FileData>
                                 {
-                                    new FileData("File 1.txt", 1000, ".txt"),
-                                    new FileData("File 2.jpg", 250000, ".jpg")
+                                    new FileData("File 1.txt"),
+                                    new FileData("File 2.jpg")
                                 },
                                 ChildrenFolder = new ObservableCollection<TreeNode>
                                 {
@@ -101,7 +101,7 @@ namespace TagManager.ViewModels
                                     {
                                         ChildrenFile = new ObservableCollection<FileData>
                                         {
-                                            new FileData("File 3.txt", 500, ".txt")
+                                            new FileData("File 3.txt")
                                         }
                                     }
                                 }
@@ -110,14 +110,14 @@ namespace TagManager.ViewModels
                             {
                                 ChildrenFile = new ObservableCollection<FileData>
                                 {
-                                    new FileData("File 4.png", 150000, ".png")
+                                    new FileData("File 4.png")
                                 }
                             }
                         },
                     ChildrenFile = new ObservableCollection<FileData>
                         {
-                            new FileData("File 1.txt", 1000, ".txt"),
-                            new FileData("File 2.jpg", 250000, ".jpg")
+                            new FileData("File 1.txt"),
+                            new FileData("File 2.jpg")
                         }
                 };
         }
@@ -141,14 +141,10 @@ namespace TagManager.ViewModels
     public class FileData
     {
         public string FileName { get; set; }
-        public long FileSize { get; set; }
-        public string FileType { get; set; }
 
-        public FileData(string fileName, long fileSize, string fileType)
+        public FileData(string fileName)
         {
             FileName = fileName;
-            FileSize = fileSize;
-            FileType = fileType;
         }
     }
 }

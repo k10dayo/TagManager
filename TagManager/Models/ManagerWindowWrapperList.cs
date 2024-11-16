@@ -6,10 +6,8 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
-using System.Net.Mail;
-using System.Text;
-using System.Threading.Tasks;
 using TagManager.Models.EverythinModels;
+using TagManager.Models.TypeClass.SearchInfo;
 using TagManager.ViewModels;
 using TagManager.Views;
 
@@ -86,9 +84,10 @@ namespace TagManager.Models
         //新しいマネージャービューをリストに追加する関数
         public void AddManagerWindow()
         {
-            var view = new TagManager.Views.ManagerWindow 
-            {
-                DataContext = new ManagerWindowViewModel(_commonProperty, _everythingModel, _dialogService)
+            var baseSearchInfo = new BaseSearchInfo();
+            var view = new TagManager.Views.ManagerWindow
+            {                
+                DataContext = new ManagerWindowViewModel(_commonProperty, _everythingModel, _dialogService, baseSearchInfo)
             };
 
             Guid uniqueId = Guid.NewGuid();
@@ -98,11 +97,11 @@ namespace TagManager.Models
             ViewCollection.Add(mww);
         }
         //新しいマネージャービューをリストに追加する関数
-        public void AddManagerWindow(string path)
+        public void AddManagerWindow(ISearchInfo searchInfo)
         {
             var view = new TagManager.Views.ManagerWindow
             {
-                DataContext = new ManagerWindowViewModel(_commonProperty, _everythingModel, _dialogService, path)
+                DataContext = new ManagerWindowViewModel(_commonProperty, _everythingModel, _dialogService, searchInfo)
             };
 
             Guid uniqueId = Guid.NewGuid();

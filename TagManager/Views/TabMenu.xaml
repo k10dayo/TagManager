@@ -34,8 +34,8 @@
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
 
-                        <Image Source="{Binding CurrentFolderThumbnailPath}" Grid.Column="0" MaxHeight="100" MaxWidth="50"/>
-                        <Label Content="{Binding CurrentFolderName}" Background="LightBlue" Grid.Column="1" x:Name="FolderPath"/>
+                        <Image Source="{Binding SearchInfo.Thumbnail}" Grid.Column="0" MaxHeight="100" MaxWidth="50"/>
+                        <Label Content="{Binding SearchInfo.Label}" Background="LightBlue" Grid.Column="1" x:Name="FolderPath"/>
                         <Grid.ContextMenu>
                             <ContextMenu Opened="OnContextMenuOpened">
                             </ContextMenu>
