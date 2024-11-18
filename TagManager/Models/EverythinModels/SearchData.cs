@@ -38,7 +38,7 @@ namespace TagManager.Models.EverythinModels
         public long FileCount { get; set; } = 0;
         public long SearchTime { get; set; } = 0;
 
-        public ObservableCollection<FileItem> FileList { get; set; } = new ObservableCollection<FileItem>();
+        public ObservableCollection<FileData> FileList { get; set; } = new ObservableCollection<FileData>();
 
 
         public event PropertyChangedEventHandler CurrentPathChanged;

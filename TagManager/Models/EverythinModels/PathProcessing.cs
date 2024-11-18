@@ -47,7 +47,7 @@ namespace TagManager.Models.EverythinModels
         /// <summary>
         ///     引数のフォルダーのサムネイルを作成するパス
         /// </summary>
-        private static string CreateFolderThumbnailPath(string fullPath)
+        public static string CreateFolderThumbnailPath(string fullPath)
         {
             return
                 fullPath + "\\" +
@@ -58,7 +58,7 @@ namespace TagManager.Models.EverythinModels
         /// <summary>
         ///     引数のファイルのサムネイルパスを作成する
         /// </summary>
-        private static string CreateFileThumbnailPath(string fullPath)
+        public static string CreateFileThumbnailPath(string fullPath)
         {
             return
                     Path.GetDirectoryName(fullPath) + "\\" +

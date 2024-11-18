@@ -22,7 +22,7 @@ public class FileTypeTemplateSelector : DataTemplateSelector
 
     public override DataTemplate SelectTemplate(object item, DependencyObject container)
     {
-        var fileItem = item as FileItem; // ここは適切な型に変更してください。
+        var fileItem = item as FileData; // ここは適切な型に変更してください。
 
         //nullだったら抜ける
         if(fileItem == null) return base.SelectTemplate(item, container);
@@ -35,8 +35,10 @@ public class FileTypeTemplateSelector : DataTemplateSelector
             {
                 return PictureTemplate;
             }
+            Debug.Print("もももももももも");
             return FileTemplate;
         }
+        
         return FolderTemplate;
         
         
