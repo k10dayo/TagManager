@@ -39,8 +39,8 @@
                     <ColumnDefinition />
                 </Grid.ColumnDefinitions>
                 <Button Grid.Column="0" Content="⚙" Style="{StaticResource defaultButtonStyle}" Command="{Binding SettingButtonClick}" />
-                <Button Grid.Column="1" Content="タグ" Style="{StaticResource defaultButtonStyle}"/>
-                <Button Grid.Column="2" Content="タブ" Style="{StaticResource defaultButtonStyle}" Command="{Binding}"/>
+                <Button Grid.Column="1" Content="タグ" Style="{StaticResource defaultButtonStyle}" Command="{Binding TagButtonClick}"/>
+                <Button Grid.Column="2" Content="タブ" Style="{StaticResource defaultButtonStyle}" Command="{Binding TabButtonClick}"/>
             </Grid>
             <ContentControl prism:RegionManager.RegionName="NaviMenuRegion" Grid.Row="1" Margin="5"/>
         </Grid>

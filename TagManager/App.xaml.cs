@@ -29,6 +29,10 @@ namespace TagManager
             containerRegistry.RegisterForNavigation<TabMenu>();
             containerRegistry.RegisterSingleton<TabMenuViewModel>();
 
+            containerRegistry.RegisterForNavigation<TagMenu>();
+            containerRegistry.RegisterSingleton<TagMenuViewModel>();
+
+
             containerRegistry.RegisterSingleton<CommonProperty>();
             containerRegistry.RegisterSingleton<ManagerWindowWrapperList>();
 

@@ -1,5 +1,4 @@
-﻿using EverythingNet.Interfaces;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -35,7 +34,6 @@ public class FileTypeTemplateSelector : DataTemplateSelector
             {
                 return PictureTemplate;
             }
-            Debug.Print("もももももももも");
             return FileTemplate;
         }
         

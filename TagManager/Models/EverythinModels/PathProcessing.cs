@@ -1,5 +1,4 @@
-﻿using EverythingNet.Interfaces;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.DirectoryServices;
@@ -25,15 +24,15 @@ namespace TagManager.Models.EverythinModels
         /// <summary>
         ///     引数のオブジェクトのフルパスからサムネイルパスを作成する
         /// </summary>
-        public static string CreateThumbnailPath(ISearchResult searchResult)
-        {
-            if (searchResult.IsFile == true)
-            {
-                return CreateFileThumbnailPath(searchResult.FullPath);
-            }
+        //public static string CreateThumbnailPath(ISearchResult searchResult)
+        //{
+        //    if (searchResult.IsFile == true)
+        //    {
+        //        return CreateFileThumbnailPath(searchResult.FullPath);
+        //    }
 
-            return CreateFolderThumbnailPath(searchResult.FullPath);
-        }
+        //    return CreateFolderThumbnailPath(searchResult.FullPath);
+        //}
 
         /// <summary>
         ///     引数のフォルダのフルパスからサムネイルパスを作成する　公開用

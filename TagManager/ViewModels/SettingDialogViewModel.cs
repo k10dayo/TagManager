@@ -17,8 +17,6 @@ namespace TagManager.ViewModels
             ClickSaveButton = new DelegateCommand(ClickSaveButtonExecute);
         }
 
-
-
         public string Title => "設定ダイアログ";
 
         public event Action<IDialogResult> RequestClose;

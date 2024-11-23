@@ -1,5 +1,6 @@
 ﻿using Prism.Mvvm;
 using Prism.Regions;
+using System.Diagnostics;
 using TagManager.Views;
 
 namespace TagManager.ViewModels

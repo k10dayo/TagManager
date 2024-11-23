@@ -46,9 +46,8 @@ namespace TagManager.ViewModels
             //ボタン
             SettingButtonClick = new DelegateCommand(SettingButtonClickExecute);
 
-
-
-
+            TagButtonClick = new DelegateCommand(TagButtonClickExecute);
+            TabButtonClick = new DelegateCommand(TabButtonClickExecute);
         }
         //ナビゲーション
         private readonly IRegionManager _regionManager;
@@ -70,12 +69,10 @@ namespace TagManager.ViewModels
         public DelegateCommand SettingButtonClick { get; }
         public void SettingButtonClickExecute()
         {
-
             var parameters = new DialogParameters
             {
                 { "paramKey", "パラメーター"}
             };
-
 
             _dialogService.ShowDialog(nameof(SettingDialog), parameters, r =>
             {
@@ -86,10 +83,18 @@ namespace TagManager.ViewModels
                     var result = r.Parameters.GetValue<string>("resultParam");
                 }
             });
+        }
 
-            
+        public DelegateCommand TagButtonClick { get; }
+        public void TagButtonClickExecute()
+        {
+            _regionManager.RequestNavigate("NaviMenuRegion", nameof(TagMenu));
+        }
 
+        public DelegateCommand TabButtonClick { get; }
+        public void TabButtonClickExecute()
+        {
+            _regionManager.RequestNavigate("NaviMenuRegion", nameof(TabMenu));
         }
     }
-
 }

@@ -85,14 +85,17 @@ namespace TagManager.Models
         public void AddManagerWindow()
         {
             var baseSearchInfo = new BaseSearchInfo();
+            Debug.Print("ここから");
             var view = new TagManager.Views.ManagerWindow
             {                
                 DataContext = new ManagerWindowViewModel(_commonProperty, _everythingModel, _dialogService, baseSearchInfo)
             };
-
+            Debug.Print("ここまで");
             Guid uniqueId = Guid.NewGuid();
 
+            
             var mww = new ManagerWindowWrapper(view, uniqueId);
+            
 
             ViewCollection.Add(mww);
         }

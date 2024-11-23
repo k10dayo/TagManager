@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
+using System.Windows;
 using TagManager.Models;
 using TagManager.Models.EverythinModels;
 using TagManager.Models.TypeClass.SearchInfo;
@@ -211,6 +212,8 @@ namespace TagManager.ViewModels
             {
                 return _everythingModel.SearchExecute(searchInfo);
             });
+
+            //MessageBox.Show($"{SearchData.FileList.Count}");
         }
 
         //履歴を更新する処理関数
